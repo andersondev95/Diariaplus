@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Minhas Diárias+</string>
+    <string name="title_activity_main">Minhas Diárias+</string>
+    <string name="package_name">com.minhasdiarias.app</string>
+    <string name="custom_url_scheme">com.minhasdiarias.app</string>
+</resources>

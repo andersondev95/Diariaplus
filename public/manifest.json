@@ -1,0 +1,20 @@
+{
+  "name": "Minhas Diárias+",
+  "short_name": "Diárias+",
+  "description": "Gerenciador de diárias de trabalho com sincronização na nuvem",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#1e40af",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"]
+}
