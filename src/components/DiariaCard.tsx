@@ -1,13 +1,14 @@
-import { Pencil, Trash2, FileText } from 'lucide-react';
+import { Pencil, Trash2, FileText, CheckCircle } from 'lucide-react';
 import { Diaria } from '../lib/database';
 
 interface DiariaCardProps {
   diaria: Diaria;
   onEdit: (diaria: Diaria) => void;
   onDelete: (id: string) => void;
+  onMarkAsPaid?: (diaria: Diaria) => void;
 }
 
-export function DiariaCard({ diaria, onEdit, onDelete }: DiariaCardProps) {
+export function DiariaCard({ diaria, onEdit, onDelete, onMarkAsPaid }: DiariaCardProps) {
   const situacaoColors = {
     'Pago': 'bg-green-100 text-green-800 border-green-300',
     'Pendente': 'bg-yellow-100 text-yellow-800 border-yellow-300',
@@ -33,6 +34,16 @@ export function DiariaCard({ diaria, onEdit, onDelete }: DiariaCardProps) {
           <p className="text-2xl font-bold text-blue-600">{formatCurrency(diaria.valor)}</p>
         </div>
         <div className="flex gap-2">
+          {diaria.situacao !== 'Pago' && onMarkAsPaid && (
+            <button
+              onClick={() => onMarkAsPaid(diaria)}
+              className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+              aria-label="Marcar como pago"
+              title="Marcar como pago"
+            >
+              <CheckCircle size={20} />
+            </button>
+          )}
           <button
             onClick={() => onEdit(diaria)}
             className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"

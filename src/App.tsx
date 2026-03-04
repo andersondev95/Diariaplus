@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Plus, Loader2 } from 'lucide-react';
 import { DiariaForm } from './components/DiariaForm';
 import { CompanySection } from './components/CompanySection';
+import { HistoryPage } from './components/HistoryPage';
 import { useDiarias } from './hooks/useDiarias';
 import { Diaria } from './lib/database';
 
@@ -9,6 +10,7 @@ function App() {
   const { diarias, loading, createDiaria, updateDiaria, deleteDiaria } = useDiarias();
   const [showForm, setShowForm] = useState(false);
   const [editingDiaria, setEditingDiaria] = useState<Diaria | null>(null);
+  const [activeTab, setActiveTab] = useState<'current' | 'history'>('current');
 
   const handleSave = async (data: {
     empresa: string;
@@ -41,9 +43,19 @@ function App() {
     setEditingDiaria(null);
   };
 
-  const getGroupedByCompany = () => {
+  const handleMarkAsPaid = (diaria: Diaria) => {
+    updateDiaria(diaria.id, {
+      empresa: diaria.empresa,
+      valor: diaria.valor,
+      data: diaria.data,
+      situacao: 'Pago',
+      motorista: diaria.motorista,
+    });
+  };
+
+  const getGroupedByCompany = (diariasList: Diaria[]) => {
     const grouped: { [key: string]: Diaria[] } = {};
-    diarias.forEach(diaria => {
+    diariasList.forEach(diaria => {
       if (!grouped[diaria.empresa]) {
         grouped[diaria.empresa] = [];
       }
@@ -52,18 +64,21 @@ function App() {
     return grouped;
   };
 
-  const groupedDiarias = getGroupedByCompany();
+  const diariasCurrent = diarias.filter(d => d.situacao !== 'Pago');
+  const diariasHistory = diarias.filter(d => d.situacao === 'Pago');
+
+  const groupedDiarias = getGroupedByCompany(diariasCurrent);
   const empresas = Object.keys(groupedDiarias).sort();
 
-  const totalPago = diarias
+  const totalPago = diariasCurrent
     .filter(d => d.situacao === 'Pago')
     .reduce((sum, d) => sum + Number(d.valor), 0);
 
-  const totalPendente = diarias
+  const totalPendente = diariasCurrent
     .filter(d => d.situacao === 'Pendente')
     .reduce((sum, d) => sum + Number(d.valor), 0);
 
-  const totalAReceber = diarias
+  const totalAReceber = diariasCurrent
     .filter(d => d.situacao === 'A Receber')
     .reduce((sum, d) => sum + Number(d.valor), 0);
 
@@ -84,17 +99,43 @@ function App() {
               alt="Minhas Diárias"
               className="h-[60px] w-auto"
             />
+            {activeTab === 'current' && (
+              <button
+                onClick={() => setShowForm(true)}
+                className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
+                aria-label="Adicionar nova diária"
+                title="Nova Diária"
+              >
+                <Plus size={24} />
+              </button>
+            )}
+          </div>
+
+          <div className="flex gap-2 mb-8 border-b border-gray-300">
             <button
-              onClick={() => setShowForm(true)}
-              className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
-              aria-label="Adicionar nova diária"
-              title="Nova Diária"
+              onClick={() => setActiveTab('current')}
+              className={`px-4 py-3 font-medium transition-colors ${
+                activeTab === 'current'
+                  ? 'border-b-2 border-blue-600 text-blue-600'
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
             >
-              <Plus size={24} />
+              Diárias Pendentes
+            </button>
+            <button
+              onClick={() => setActiveTab('history')}
+              className={`px-4 py-3 font-medium transition-colors ${
+                activeTab === 'history'
+                  ? 'border-b-2 border-green-600 text-green-600'
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
+            >
+              Histórico de Pagas
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          {activeTab === 'current' && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
               <h3 className="text-sm font-medium text-gray-600 mb-1">Pago</h3>
               <p className="text-2xl font-bold text-green-600">{formatCurrency(totalPago)}</p>
@@ -108,6 +149,7 @@ function App() {
               <p className="text-2xl font-bold text-red-600">{formatCurrency(totalAReceber)}</p>
             </div>
           </div>
+          )}
         </div>
 
         {loading ? (
@@ -115,35 +157,44 @@ function App() {
             <Loader2 className="animate-spin text-blue-600 mb-4" size={48} />
             <p className="text-gray-600">Carregando diárias...</p>
           </div>
-        ) : diarias.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-md p-12 text-center">
-            <img
-              src="/IMG_20260217_131245.png"
-              alt="Nenhuma diária"
-              className="mx-auto mb-4 h-[80px] w-auto opacity-40"
-            />
-            <h2 className="text-2xl font-semibold text-gray-800 mb-2">Nenhuma diária cadastrada</h2>
-            <p className="text-gray-600 mb-6">Comece adicionando sua primeira diária de trabalho.</p>
-            <button
-              onClick={() => setShowForm(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <Plus size={20} />
-              <span>Adicionar Primeira Diária</span>
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {empresas.map(empresa => (
-              <CompanySection
-                key={empresa}
-                empresa={empresa}
-                diarias={groupedDiarias[empresa]}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
+        ) : activeTab === 'current' ? (
+          diariasCurrent.length === 0 ? (
+            <div className="bg-white rounded-lg shadow-md p-12 text-center">
+              <img
+                src="/IMG_20260217_131245.png"
+                alt="Nenhuma diária"
+                className="mx-auto mb-4 h-[80px] w-auto opacity-40"
               />
-            ))}
-          </div>
+              <h2 className="text-2xl font-semibold text-gray-800 mb-2">Nenhuma diária cadastrada</h2>
+              <p className="text-gray-600 mb-6">Comece adicionando sua primeira diária de trabalho.</p>
+              <button
+                onClick={() => setShowForm(true)}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Plus size={20} />
+                <span>Adicionar Primeira Diária</span>
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {empresas.map(empresa => (
+                <CompanySection
+                  key={empresa}
+                  empresa={empresa}
+                  diarias={groupedDiarias[empresa]}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                  onMarkAsPaid={handleMarkAsPaid}
+                />
+              ))}
+            </div>
+          )
+        ) : (
+          <HistoryPage
+            diarias={diariasHistory}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
         )}
       </div>
 

@@ -9,6 +9,7 @@ interface CompanySectionProps {
   diarias: Diaria[];
   onEdit: (diaria: Diaria) => void;
   onDelete: (id: string) => void;
+  onMarkAsPaid?: (diaria: Diaria) => void;
 }
 
 export function CompanySection({
@@ -16,6 +17,7 @@ export function CompanySection({
   diarias,
   onEdit,
   onDelete,
+  onMarkAsPaid,
 }: CompanySectionProps) {
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -111,6 +113,7 @@ export function CompanySection({
                     diaria={diaria}
                     onEdit={onEdit}
                     onDelete={onDelete}
+                    onMarkAsPaid={onMarkAsPaid}
                   />
                 ))}
               </div>
