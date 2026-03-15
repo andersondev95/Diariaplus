@@ -10,9 +10,8 @@ interface DiariaCardProps {
 
 export function DiariaCard({ diaria, onEdit, onDelete, onMarkAsPaid }: DiariaCardProps) {
   const situacaoColors = {
-    'Pago': 'bg-green-100 text-green-800 border-green-300',
-    'Pendente': 'bg-yellow-100 text-yellow-800 border-yellow-300',
-    'A Receber': 'bg-red-100 text-red-800 border-red-300'
+    'Pago': 'bg-green-500/20 text-green-300 border-green-500/50',
+    'A Receber': 'bg-red-500/20 text-red-300 border-red-500/50'
   };
 
   const formatCurrency = (value: number) => {
@@ -27,17 +26,17 @@ export function DiariaCard({ diaria, onEdit, onDelete, onMarkAsPaid }: DiariaCar
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-5 hover:border-white/40 hover:bg-white/15 transition-all group">
       <div className="flex justify-between items-start mb-4">
         <div className="flex-1">
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">{diaria.empresa}</h3>
-          <p className="text-2xl font-bold text-blue-600">{formatCurrency(diaria.valor)}</p>
+          <h3 className="text-lg font-bold text-white mb-1">{diaria.empresa}</h3>
+          <p className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">{formatCurrency(diaria.valor)}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-1.5">
           {diaria.situacao !== 'Pago' && onMarkAsPaid && (
             <button
               onClick={() => onMarkAsPaid(diaria)}
-              className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+              className="p-2 text-green-400 hover:bg-green-500/20 rounded-lg transition-all hover:scale-110"
               aria-label="Marcar como pago"
               title="Marcar como pago"
             >
@@ -46,14 +45,14 @@ export function DiariaCard({ diaria, onEdit, onDelete, onMarkAsPaid }: DiariaCar
           )}
           <button
             onClick={() => onEdit(diaria)}
-            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            className="p-2 text-blue-400 hover:bg-blue-500/20 rounded-lg transition-all hover:scale-110"
             aria-label="Editar"
           >
             <Pencil size={20} />
           </button>
           <button
             onClick={() => onDelete(diaria.id)}
-            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            className="p-2 text-red-400 hover:bg-red-500/20 rounded-lg transition-all hover:scale-110"
             aria-label="Excluir"
           >
             <Trash2 size={20} />
@@ -61,36 +60,36 @@ export function DiariaCard({ diaria, onEdit, onDelete, onMarkAsPaid }: DiariaCar
         </div>
       </div>
 
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-gray-600">Data:</span>
-          <span className="text-gray-800 font-medium">{formatDate(diaria.data)}</span>
+      <div className="space-y-3">
+        <div className="flex items-center justify-between py-2 border-b border-white/10">
+          <span className="text-white/60">Data:</span>
+          <span className="text-white/90 font-medium">{formatDate(diaria.data)}</span>
         </div>
 
         {diaria.motorista && (
-          <div className="flex items-center justify-between">
-            <span className="text-gray-600">Motorista:</span>
-            <span className="text-gray-800 font-medium">{diaria.motorista}</span>
+          <div className="flex items-center justify-between py-2 border-b border-white/10">
+            <span className="text-white/60">Motorista:</span>
+            <span className="text-white/90 font-medium">{diaria.motorista}</span>
           </div>
         )}
 
-        <div className="flex items-center justify-between">
-          <span className="text-gray-600">Situação:</span>
-          <span className={`px-3 py-1 rounded-full text-sm font-medium border ${situacaoColors[diaria.situacao]}`}>
+        <div className="flex items-center justify-between py-2">
+          <span className="text-white/60">Situação:</span>
+          <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${situacaoColors[diaria.situacao]}`}>
             {diaria.situacao}
           </span>
         </div>
 
         {diaria.comprovante_base64 && (
-          <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-            <span className="text-gray-600">Comprovante:</span>
+          <div className="flex items-center justify-between pt-2 border-t border-white/10">
+            <span className="text-white/60">Comprovante:</span>
             <a
               href={diaria.comprovante_base64}
               download={diaria.comprovante_nome || 'comprovante'}
-              className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors"
+              className="inline-flex items-center gap-1 text-blue-400 hover:text-blue-300 transition-colors text-sm"
             >
               <FileText size={16} />
-              <span className="text-sm">{diaria.comprovante_nome || 'Download'}</span>
+              <span>{diaria.comprovante_nome || 'Download'}</span>
             </a>
           </div>
         )}

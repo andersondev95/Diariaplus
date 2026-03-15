@@ -60,24 +60,24 @@ export function HistoryPage({
 
   if (diarias.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-12 text-center">
+      <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-12 text-center">
         <img
           src="/IMG_20260217_131245.png"
           alt="Nenhuma diária"
-          className="mx-auto mb-4 h-[80px] w-auto opacity-40"
+          className="mx-auto mb-4 h-[80px] w-auto opacity-20"
         />
-        <h2 className="text-2xl font-semibold text-gray-800 mb-2">Nenhuma diária paga</h2>
-        <p className="text-gray-600">As diárias marcadas como pagas aparecerão aqui.</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Nenhuma diária paga</h2>
+        <p className="text-white/50">As diárias marcadas como pagas aparecerão aqui.</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
-        <h3 className="text-sm font-medium text-gray-600 mb-1">Total em Histórico</h3>
-        <p className="text-3xl font-bold text-green-600">{formatCurrency(totalPago)}</p>
-        <p className="text-sm text-gray-500 mt-2">{diarias.length} diária(s) paga(s)</p>
+      <div className="bg-gradient-to-r from-green-600/40 to-green-700/40 border border-green-500/50 rounded-xl p-6 backdrop-blur-sm">
+        <h3 className="text-sm font-medium text-green-300 mb-2">Total em Histórico</h3>
+        <p className="text-4xl font-bold text-green-400">{formatCurrency(totalPago)}</p>
+        <p className="text-sm text-green-300/70 mt-2">{diarias.length} diária(s) paga(s)</p>
       </div>
 
       {empresas.map(empresa => {
@@ -86,70 +86,70 @@ export function HistoryPage({
         const isExpanded = expandedCompanies.has(empresa);
 
         return (
-          <div key={empresa} className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div key={empresa} className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl overflow-hidden hover:border-white/40 transition-all group">
             <div
-              className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4 cursor-pointer hover:from-green-700 hover:to-green-800 transition-all"
+              className="bg-gradient-to-r from-green-600/80 to-green-700/80 hover:from-green-600 hover:to-green-700 px-6 py-5 cursor-pointer transition-all group-hover:shadow-lg"
               onClick={() => toggleCompany(empresa)}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3 flex-1">
                   {isExpanded ? (
-                    <ChevronUp size={20} className="text-white flex-shrink-0" />
+                    <ChevronUp size={22} className="text-white flex-shrink-0" />
                   ) : (
-                    <ChevronDown size={20} className="text-white flex-shrink-0" />
+                    <ChevronDown size={22} className="text-white flex-shrink-0" />
                   )}
                   <h2 className="text-2xl font-bold text-white">{empresa}</h2>
                 </div>
                 <div className="text-right text-white">
-                  <p className="text-lg font-semibold">{formatCurrency(empresaTotal)}</p>
-                  <p className="text-sm opacity-90">{diariasEmpresa.length} diária(s)</p>
+                  <p className="text-2xl font-bold">{formatCurrency(empresaTotal)}</p>
+                  <p className="text-sm text-green-100">{diariasEmpresa.length} diária(s)</p>
                 </div>
               </div>
             </div>
 
             {isExpanded && (
-              <div className="p-6 space-y-4">
+              <div className="p-6 space-y-4 bg-gradient-to-b from-white/5 to-white/0">
                 <div className="flex justify-end">
                   <button
                     onClick={() => handleExportPDF(empresa, diariasEmpresa)}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-md hover:shadow-lg"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-lg transition-all shadow-lg hover:shadow-xl hover:scale-105"
                     title="Exportar relatório em PDF"
                   >
                     <Download size={18} />
-                    <span>Exportar PDF</span>
+                    <span className="font-medium">Exportar PDF</span>
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 border-t border-gray-200 pt-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 border-t border-white/10 pt-4">
                   {diariasEmpresa.map(diaria => (
-                    <div key={diaria.id} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-4">
+                    <div key={diaria.id} className="bg-gradient-to-br from-green-500/20 to-green-600/20 border border-green-500/30 rounded-xl p-4 backdrop-blur-sm">
                       <div className="flex justify-between items-start mb-3">
                         <div>
-                          <p className="text-lg font-bold text-green-600">{formatCurrency(diaria.valor)}</p>
-                          <p className="text-xs text-gray-500">{formatDate(diaria.data)}</p>
+                          <p className="text-lg font-bold text-green-400">{formatCurrency(diaria.valor)}</p>
+                          <p className="text-xs text-white/50">{formatDate(diaria.data)}</p>
                         </div>
                       </div>
 
                       {diaria.motorista && (
-                        <p className="text-sm text-gray-700 mb-2">
+                        <p className="text-sm text-white/80 mb-2">
                           <span className="font-medium">Motorista:</span> {diaria.motorista}
                         </p>
                       )}
 
-                      <span className="inline-block px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full border border-green-300 mb-3">
+                      <span className="inline-block px-2 py-1 bg-green-500/30 text-green-300 text-xs font-semibold rounded-full border border-green-500/50 mb-3">
                         Pago
                       </span>
 
                       <div className="flex gap-2">
                         <button
                           onClick={() => onEdit(diaria)}
-                          className="flex-1 px-3 py-2 text-sm bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors"
+                          className="flex-1 px-3 py-2 text-sm bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-all border border-blue-500/30"
                         >
                           Editar
                         </button>
                         <button
                           onClick={() => onDelete(diaria.id)}
-                          className="flex-1 px-3 py-2 text-sm bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors"
+                          className="flex-1 px-3 py-2 text-sm bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-all border border-red-500/30"
                         >
                           Remover
                         </button>

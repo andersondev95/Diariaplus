@@ -8,7 +8,7 @@ interface DiariaFormProps {
     empresa: string;
     valor: number;
     data: string;
-    situacao: 'Pago' | 'Pendente' | 'A Receber';
+    situacao: 'Pago' | 'A Receber';
     motorista?: string;
     file?: File;
   }) => Promise<void>;
@@ -20,7 +20,7 @@ export function DiariaForm({ diaria, onSave, onClose }: DiariaFormProps) {
   const [valor, setValor] = useState('');
   const [data, setData] = useState('');
   const [motorista, setMotorista] = useState('');
-  const [situacao, setSituacao] = useState<'Pago' | 'Pendente' | 'A Receber'>('Pendente');
+  const [situacao, setSituacao] = useState<'Pago' | 'A Receber'>('A Receber');
   const [file, setFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -81,24 +81,24 @@ export function DiariaForm({ diaria, onSave, onClose }: DiariaFormProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-800">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border border-white/10">
+        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 border-b border-white/10 px-6 py-5 flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-white">
             {diaria ? 'Editar Diária' : 'Nova Diária'}
           </h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
             aria-label="Fechar"
           >
-            <X size={24} />
+            <X size={24} className="text-white" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
           <div>
-            <label htmlFor="empresa" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="empresa" className="block text-sm font-semibold text-white/90 mb-2">
               Nome da Empresa *
             </label>
             <input
@@ -106,13 +106,13 @@ export function DiariaForm({ diaria, onSave, onClose }: DiariaFormProps) {
               id="empresa"
               value={empresa}
               onChange={(e) => setEmpresa(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="valor" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="valor" className="block text-sm font-semibold text-white/90 mb-2">
               Valor (R$) *
             </label>
             <input
@@ -122,13 +122,13 @@ export function DiariaForm({ diaria, onSave, onClose }: DiariaFormProps) {
               onChange={(e) => setValor(e.target.value)}
               step="0.01"
               min="0"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="data" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="data" className="block text-sm font-semibold text-white/90 mb-2">
               Data *
             </label>
             <input
@@ -136,13 +136,13 @@ export function DiariaForm({ diaria, onSave, onClose }: DiariaFormProps) {
               id="data"
               value={data}
               onChange={(e) => setData(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="motorista" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="motorista" className="block text-sm font-semibold text-white/90 mb-2">
               Motorista
             </label>
             <input
@@ -150,37 +150,36 @@ export function DiariaForm({ diaria, onSave, onClose }: DiariaFormProps) {
               id="motorista"
               value={motorista}
               onChange={(e) => setMotorista(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
               placeholder="Nome do motorista (opcional)"
             />
           </div>
 
           <div>
-            <label htmlFor="situacao" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="situacao" className="block text-sm font-semibold text-white/90 mb-2">
               Situação *
             </label>
             <select
               id="situacao"
               value={situacao}
-              onChange={(e) => setSituacao(e.target.value as 'Pago' | 'Pendente' | 'A Receber')}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              onChange={(e) => setSituacao(e.target.value as 'Pago' | 'A Receber')}
+              className="w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
               required
             >
-              <option value="Pendente">Pendente</option>
-              <option value="A Receber">A Receber</option>
-              <option value="Pago">Pago</option>
+              <option value="A Receber" className="bg-slate-800">A Receber</option>
+              <option value="Pago" className="bg-slate-800">Pago</option>
             </select>
           </div>
 
           <div>
-            <label htmlFor="file" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="file" className="block text-sm font-semibold text-white/90 mb-2">
               Comprovante (opcional)
             </label>
-            <div className="mt-1 flex items-center gap-3">
+            <div className="mt-2 flex items-center gap-3">
               <label className="flex-1 cursor-pointer">
-                <div className="flex items-center justify-center px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 transition-colors">
-                  <Upload size={20} className="mr-2 text-gray-500" />
-                  <span className="text-sm text-gray-600">
+                <div className="flex items-center justify-center px-4 py-3 border-2 border-dashed border-white/20 hover:border-blue-500 rounded-lg transition-colors bg-white/5 hover:bg-blue-500/10">
+                  <Upload size={20} className="mr-2 text-white/60" />
+                  <span className="text-sm text-white/70">
                     {file ? file.name : 'Selecionar arquivo'}
                   </span>
                 </div>
@@ -196,28 +195,28 @@ export function DiariaForm({ diaria, onSave, onClose }: DiariaFormProps) {
                 <button
                   type="button"
                   onClick={() => setFile(null)}
-                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="p-2.5 text-red-400 hover:bg-red-500/20 rounded-lg transition-all border border-red-500/30"
                   aria-label="Remover arquivo"
                 >
                   <X size={20} />
                 </button>
               )}
             </div>
-            <p className="mt-1 text-xs text-gray-500">JPG, PNG ou PDF (máx. 5MB)</p>
+            <p className="mt-2 text-xs text-white/40">JPG, PNG ou PDF (máx. 5MB)</p>
           </div>
 
           <div className="flex gap-3 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex-1 px-4 py-2.5 border border-white/20 text-white/80 rounded-lg hover:bg-white/5 transition-all font-medium"
               disabled={isSubmitting}
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-medium transition-all shadow-lg hover:shadow-xl"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
