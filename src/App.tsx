@@ -148,22 +148,22 @@ function App() {
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-12">
-            <Loader2 className="animate-spin text-blue-600 mb-4" size={48} />
-            <p className="text-gray-600">Carregando diárias...</p>
+            <Loader2 className="animate-spin text-blue-400 mb-4" size={48} />
+            <p className="text-white/50">Carregando diárias...</p>
           </div>
         ) : activeTab === 'current' ? (
           diariasCurrent.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-md p-12 text-center">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-12 text-center">
               <img
                 src="/IMG_20260217_131245.png"
                 alt="Nenhuma diária"
-                className="mx-auto mb-4 h-[80px] w-auto opacity-40"
+                className="mx-auto mb-4 h-[80px] w-auto opacity-20"
               />
-              <h2 className="text-2xl font-semibold text-gray-800 mb-2">Nenhuma diária cadastrada</h2>
-              <p className="text-gray-600 mb-6">Comece adicionando sua primeira diária de trabalho.</p>
+              <h2 className="text-2xl font-semibold text-white mb-2">Nenhuma diária cadastrada</h2>
+              <p className="text-white/50 mb-6">Comece adicionando sua primeira diária de trabalho.</p>
               <button
                 onClick={() => setShowForm(true)}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl hover:scale-105"
               >
                 <Plus size={20} />
                 <span>Adicionar Primeira Diária</span>
